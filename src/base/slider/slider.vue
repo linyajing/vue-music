@@ -4,9 +4,10 @@
   		<slot></slot>
   	</div>
   	<div class="dots">
-  		<span 
-        class="dot" 
+  		<span
+        class="dot"
         v-for="(item,index) in dots"
+        :key="index"
         :class="{active:currentPageIndex===index}">
       </span>
   	</div>
@@ -113,7 +114,8 @@ import {addClass} from 'common/js/dom.js';
           this.slider.goToPage(pageIndex,0,400);
         },this.interval);
       }
-		},
+    },
+    // 对于有计时器的组件，保留销毁的好习惯
     destroyed() {
       clearTimeout(this.timer);
     },

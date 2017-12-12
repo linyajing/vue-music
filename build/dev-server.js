@@ -1,5 +1,5 @@
 require('./check-versions')()
-
+const axios = require('axios');
 var config = require('../config')
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
@@ -21,6 +21,24 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+// 下面开始定义路由
+var apiRoutes = express.Router();
+apiRoutes.get('/getDiscList', (req, res) => {
+  const url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg';
+  axios.get(url, {
+    headers: {
+      referer: 'https://c.y.qq.com',
+      host: 'c.y.qq.com'
+    },
+    params: req.query
+  }).then(response => {
+    res.json(response.data);
+  }).catch(e => {
+    console.log(e);
+  })
+});
+app.use('/api',apiRoutes)
+//路由拦截结束
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
